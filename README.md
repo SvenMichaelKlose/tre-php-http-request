@@ -1,4 +1,4 @@
-# HTTP request for tré (JavaScript target)
+# HTTP request for tré (PHP target)
 
 Under construction. No version yet.
 
