@@ -88,13 +88,15 @@
     "CHUNK_FAILED"))
 
 ; DATA is an associative list of key/value pairs.
-(fn http-request (url data &key (header nil) (onerror nil) (onresult nil))
+(fn http-request (url data &key (header nil) (onerror nil) (onresult nil) (urlencoded? nil))
   (let c (curl_init)
     (curl_setopt c (%%native "CURLOPT_URL") url)
     (awhen header
       (curl_setopt c (%%native "CURLOPT_HTTPHEADER")
                    (list-phparray (mapcar [+ _. ": " ._]
-                                          (. (. "Content-Type" "application/x-www-form-urlencoded")
+                                          (? urlencoded?
+                                             (. (. "Content-Type" "application/x-www-form-urlencoded")
+                                                header)
                                              header)))))
     (curl_setopt c (%%native "CURLOPT_POST") T)
     (curl_setopt c (%%native "CURLOPT_POSTFIELDS")
